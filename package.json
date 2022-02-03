@@ -1,0 +1,28 @@
+{
+  "name": "fuoye360-api",
+  "version": "1.0.0",
+  "description": "FUOYE360 API built with Node.JS",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ayomide-Daniel/fuoye360-api-nodejs.git"
+  },
+  "author": "Ayomide Daniel (Brown)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Ayomide-Daniel/fuoye360-api-nodejs/issues"
+  },
+  "homepage": "https://github.com/Ayomide-Daniel/fuoye360-api-nodejs#readme",
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "express": "^4.17.2",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.15.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
