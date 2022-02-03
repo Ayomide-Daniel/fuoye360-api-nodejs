@@ -1,0 +1,9 @@
+# send post requrest to http://localhost:5000/api/users
+# with json data {"username": "michael", "email": "ayomide@g.com", "password": "password", "phone_number": "08031234567"}
+# store response in response object
+
+POST http://localhost:5000/api/users
+Content-Type: application/json
+Accept: application/json
+
+{"name":"Ayomide Daniel", "username": "dan_le_brown_", "email": ".com", "password": "password", "phone_number": "08031234567"}

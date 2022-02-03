@@ -1,5 +1,5 @@
-const express = require("express");
 const dotenv = require("dotenv");
+const express = require("express");
 const path = require("path");
 // const Logger = require('./middleware/Logger')
 
@@ -11,20 +11,13 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// app.get('/', (req, res)=> {
-//     res.render('index')
-// })
-
-/**
- * Users API routes
- */
-// app.use('/api/todos', require('./routes/api/todo'))
-
 //Sync Sequelize
-const db = require("./src/models/Db");
-db.sequelize.sync({ alter: true }).then(() => {
-  console.log("Database dropped and re-sync successfully.");
+const db = require("./models");
+db.sequelize.sync({ force: false }).then(() => {
+    //   console.log("Database dropped and re-sync successfully.");
 });
+
+require('./src/api')(app)
 
 const PORT = process.env.PORT;
 app.listen(PORT, () =>
