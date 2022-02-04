@@ -1,7 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const { registerController, loginController } = require("../../Controllers/AuthController");
-const {validateLoginFields, validateRegisterFields} = require("../../Middlewares/auth.validation")
+const {
+  registerController,
+  loginController,
+} = require("../../Controllers/AuthController");
+const {
+  validateLoginFields,
+  validateRegisterFields,
+} = require("../../Middlewares/auth.validation");
 
 module.exports = (app) => {
   /**

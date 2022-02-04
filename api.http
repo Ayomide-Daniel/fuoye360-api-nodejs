@@ -2,7 +2,7 @@
 # with json data {"username": "michael", "email": "ayomide@g.com", "password": "password", "phone_number": "08031234567"}
 # store response in response object
 
-POST http://localhost:5000/api/users
+POST http://localhost:5000/api/v1/auth/register
 Content-Type: application/json
 Accept: application/json
 

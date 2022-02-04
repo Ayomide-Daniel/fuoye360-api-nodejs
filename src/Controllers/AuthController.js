@@ -1,3 +1,5 @@
+const jwt = require("jsonwebtoken");
+const { jwtSecret, jwtExpiresIn } = require("../../config/jwt.config");
 const { successResponse, errorResponse } = require("../Helpers/response");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
@@ -14,8 +16,13 @@ exports.registerController = async (req, res) => {
       phone_number,
       password
     );
-    successResponse(res, 200, "User regristration successful", user);
+    const token = await generateToken(user);
+    successResponse(res, 200, "User regristration successful", {
+      user,
+      token,
+    });
   } catch (error) {
+    console.log(error);
     errorResponse(res, 422, error.errors[0].message, null);
   }
 };
@@ -24,7 +31,8 @@ exports.loginController = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await loginUser(email, password);
-    successResponse(res, 200, "User login successful", user);
+    const token = await generateToken(user);
+    successResponse(res, 200, "User login successful", { user, token });
   } catch (error) {
     errorResponse(res, 422, error, null);
   }
@@ -40,7 +48,7 @@ const registerUser = async (name, username, email, phone_number, password) => {
     password: hash,
   };
 
- return await User.create(data);
+  return await User.create(data);
 };
 
 const loginUser = async (email, password) => {
@@ -53,4 +61,14 @@ const loginUser = async (email, password) => {
     return user;
   }
   throw "Your credentials are incorrect!";
+};
+
+const generateToken = async (user) => {
+  return await jwt.sign(
+    {
+      user,
+    },
+    jwtSecret,
+    { expiresIn: jwtExpiresIn }
+  );
 };
