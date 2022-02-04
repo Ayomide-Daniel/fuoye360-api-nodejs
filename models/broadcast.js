@@ -21,7 +21,6 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       post_id: {
-        allowNull: false,
         type: DataTypes.INTEGER,
         validate: {
           isInt: true,
@@ -41,5 +40,10 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "Broadcast",
     }
   );
+
+  Broadcast.associate = (models) => {
+    Broadcast.belongsTo(models.User, { foreignKey: "user_id" });
+    //  Broadcast.hasMany(models.Licencie);
+  };
   return Broadcast;
 };

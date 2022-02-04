@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { store, index } = require("../../Controllers/BroadcastController");
-const { verifyUser } = require("../../Middlewares/verifyUser");
-const { validateStore } = require("../../Middlewares/broadcast.validation");
+const { store, index } = require("../Controllers/BroadcastController");
+const { verifyUser } = require("../Middlewares/verifyUser");
+const { validateStore } = require("../Middlewares/broadcast.validation");
 
 module.exports = (app) => {
   /**

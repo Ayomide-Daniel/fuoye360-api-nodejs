@@ -7,7 +7,7 @@ module.exports = (app) => {
   /**
    * User Routes
    */
-  // require('./User')(app)
+  require("./user")(app);
 
   /**
    * Broadcast Routes

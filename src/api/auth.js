@@ -3,11 +3,11 @@ const router = express.Router();
 const {
   registerController,
   loginController,
-} = require("../../Controllers/AuthController");
+} = require("../Controllers/AuthController");
 const {
   validateLoginFields,
   validateRegisterFields,
-} = require("../../Middlewares/auth.validation");
+} = require("../Middlewares/auth.validation");
 
 module.exports = (app) => {
   /**
@@ -20,5 +20,5 @@ module.exports = (app) => {
    */
   router.post("/login", validateLoginFields, loginController);
 
-  app.use("/api/v1/auth", router);
+  app.use("/api/v1", router);
 };

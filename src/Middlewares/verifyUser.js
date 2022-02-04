@@ -10,15 +10,19 @@ exports.verifyUser = async (req, res, next) => {
       if (err) {
         errorResponse(res, 401, "User authenticated", null);
       } else {
-        const email = decoded.email;
-        const user = await User.findOne({ email });
+        const email = decoded.user.email;
+        const user = await User.findOne({
+          where: { email },
+          attributes: { exclude: ["password", "email_verified_at"] },
+        });
         if (!user) {
           errorResponse(res, 401, "TF???", null);
         }
-        // res.locals.user = user;
+        res.locals.user = user;
         next();
       }
     });
+  } else {
+    errorResponse(res, 401, "User authenticated", null);
   }
-  errorResponse(res, 401, "User authenticated", null);
 };

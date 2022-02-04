@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { successResponse, errorResponse } = require("../Helpers/response");
-const { Broadcast } = require("../../models");
-const { op } = require("sequelize");
+const { Broadcast, User } = require("../../models");
+const { Op } = require("sequelize");
 
 exports.store = async (req, res) => {
   const { user_id, post_id, body, media } = req.body;
@@ -22,8 +22,8 @@ exports.index = async (req, res) => {
 
     successResponse(res, 200, "Broadcasts retrieved successfully", broadcasts);
   } catch (error) {
-    console.log(error);
-    errorResponse(res, 422, error.errors[0].message, null);
+    console.error(error);
+    errorResponse(res, 422, error, null);
   }
 };
 
@@ -49,14 +49,8 @@ const createTweet = (user_id, post_id, body, media) => {
   return Broadcast.create(data);
 };
 
-const getTweets = () => {
-  return Broadcast.findAll({
-    where: {
-      user_id: {
-        [Op.ne]: null,
-      },
-    },
-  });
+const getTweets = async () => {
+  return await Broadcast.findAll();
 };
 
 const deleteTweet = (id) => {
