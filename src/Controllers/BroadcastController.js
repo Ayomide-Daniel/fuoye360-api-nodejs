@@ -4,8 +4,8 @@ const { Broadcast, User } = require("../../models");
 const { Op } = require("sequelize");
 
 exports.store = async (req, res) => {
-  const { user_id, post_id, body, media } = req.body;
-
+  const { post_id, body, media } = req.body;
+  const user_id = res.locals.user.id;
   try {
     const broadcast = await createTweet(user_id, post_id, body, media);
 
@@ -50,7 +50,12 @@ const createTweet = (user_id, post_id, body, media) => {
 };
 
 const getTweets = async () => {
-  return await Broadcast.findAll();
+  return await Broadcast.findAll({
+    include: {
+      model: User,
+      attributes: { exclude: ["password", "email_verified_at"] },
+    },
+  });
 };
 
 const deleteTweet = (id) => {

@@ -8,7 +8,9 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      User.hasMany(models.Broadcast, { foreignKey: "id" });
+      User.hasMany(models.BroadcastLike, { foreignKey: "id" });
+      User.hasMany(models.BroadcastRetweet, { foreignKey: "id" });
     }
   }
   User.init(
@@ -53,9 +55,5 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "User",
     }
   );
-
-  User.associate = (models) => {
-    User.hasMany(models.Broadcast, { foreignKey: "id" });
-  };
   return User;
 };

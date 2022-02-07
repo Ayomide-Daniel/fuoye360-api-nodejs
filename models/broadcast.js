@@ -20,12 +20,7 @@ module.exports = (sequelize, DataTypes) => {
           isInt: true,
         },
       },
-      post_id: {
-        type: DataTypes.INTEGER,
-        validate: {
-          isInt: true,
-        },
-      },
+      post_id: DataTypes.INTEGER,
       body: {
         allowNull: false,
         type: DataTypes.TEXT,
