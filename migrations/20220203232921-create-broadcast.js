@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("Broadcasts", {
@@ -12,17 +12,12 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
       },
-      post_id: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-      },
+      post_id: Sequelize.INTEGER,
       body: {
         allowNull: false,
         type: Sequelize.TEXT,
       },
-      data: {
-        type: Sequelize.TEXT,
-      },
+      media: Sequelize.TEXT,
       created_at: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW,
@@ -34,6 +29,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Broadcasts');
-  }
+    await queryInterface.dropTable("Broadcasts");
+  },
 };

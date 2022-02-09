@@ -17,7 +17,12 @@ exports.store = async (req, res) => {
   const { post_id, body, media } = req.body;
   const user_id = res.locals.user.id;
   try {
-    const broadcast = await createTweet(user_id, post_id, body, media);
+    const broadcast = await createTweet(
+      user_id,
+      post_id,
+      body,
+      JSON.stringify(media)
+    );
 
     successResponse(res, 200, "Broadcast created successfully", broadcast);
   } catch (error) {
@@ -58,14 +63,11 @@ exports.uploadImage = async (req, res) => {
       { folder: "fuoye360/broadcast_images" },
       (error, result) => {
         if (error) {
-          return errorResponse(res, 500, err, null);
+          errorResponse(res, 500, err, null);
         }
-        return successResponse(
-          res,
-          200,
-          "Broadcast Image uploaded successfully",
-          { url: result.secure_url }
-        );
+        successResponse(res, 200, "Broadcast Image uploaded successfully", {
+          url: result.secure_url,
+        });
       }
     );
     bufferToStream(data).pipe(stream);

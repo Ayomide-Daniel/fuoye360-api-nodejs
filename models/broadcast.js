@@ -9,15 +9,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Broadcast.belongsTo(models.User, { foreignKey: "user_id" });
-      Broadcast.hasMany(models.BroadcastBookmark, {
-        foreignKey: "broadcast_id",
-      });
-      Broadcast.hasMany(models.BroadcastLike, {
-        foreignKey: "broadcast_id",
-      });
-      Broadcast.hasMany(models.BroadcastRetweet, {
-        foreignKey: "broadcast_id",
-      });
+      // Broadcast.hasMany(models.BroadcastBookmark, {
+      //   foreignKey: "broadcast_id",
+      // });
+      // Broadcast.hasMany(models.BroadcastLike, {
+      //   foreignKey: "broadcast_id",
+      // });
+      // Broadcast.hasMany(models.BroadcastRetweet, {
+      //   foreignKey: "broadcast_id",
+      // });
     }
   }
   Broadcast.init(
@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.TEXT,
       },
-      data: DataTypes.TEXT,
+      media: DataTypes.TEXT,
     },
     {
       sequelize,

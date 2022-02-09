@@ -15,8 +15,14 @@ module.exports = (sequelize, DataTypes) => {
   }
   BroadcastRetweet.init(
     {
-      user_id: DataTypes.INTEGER,
-      broadcast_id: DataTypes.INTEGER,
+      user_id: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
+      post_id: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
     },
     {
       sequelize,

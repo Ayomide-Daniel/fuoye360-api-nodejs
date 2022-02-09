@@ -13,8 +13,14 @@ module.exports = (sequelize, DataTypes) => {
   }
   BroadcastBookmark.init(
     {
-      user_id: DataTypes.INTEGER,
-      post_id: DataTypes.INTEGER,
+      user_id: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
+      post_id: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
     },
     {
       sequelize,
