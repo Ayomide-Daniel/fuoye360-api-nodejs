@@ -50,10 +50,18 @@ app.get("/", (req, res) => {
 
 require("./src/api")(app);
 
-app.listen(process.env.PORT || 5000, function () {
-  console.log(
-    "Express server listening on port %d in %s mode",
-    this.address().port,
-    app.settings.env
-  );
+//  use alternate localhost and the port Heroku assigns to $PORT
+const host = "0.0.0.0";
+const port = process.env.PORT || 5000;
+
+app.listen(port, host, function () {
+  console.log("Server started.......");
 });
+
+// app.listen(process.env.PORT || 5000, function () {
+//   console.log(
+//     "Express server listening on port %d in %s mode",
+//     this.address().port,
+//     app.settings.env
+//   );
+// });
