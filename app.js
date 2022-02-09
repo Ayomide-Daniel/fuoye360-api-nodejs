@@ -24,13 +24,15 @@ app.use(helmet());
 app.use(limiter);
 
 //Sync Sequelize
-const db = require("./models");
-db.sequelize.sync({ force: false }).then(() => {
-  //   console.log("Database dropped and re-sync successfully.");
-});
+// const db = require("./models");
+// db.sequelize.sync({ force: false }).then(() => {
+// console.log("Database dropped and re-sync successfully.");
+// });
 
 // use it before all route definitions
-app.use(cors({ origin: ["http://localhost:3000", "https://broadcast.fuoye360.com"] }));
+app.use(
+  cors({ origin: ["http://localhost:3000", "https://broadcast.fuoye360.com"] })
+);
 require("./src/api")(app);
 
 const PORT = process.env.PORT;
