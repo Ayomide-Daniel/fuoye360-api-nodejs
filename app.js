@@ -44,6 +44,10 @@ try {
 app.use(
   cors({ origin: ["http://localhost:3000", "https://broadcast.fuoye360.com"] })
 );
+app.get("/", (req, res) => {
+  res.status(200).send({ message: "Hello world!" });
+});
+
 require("./src/api")(app);
 
 const PORT = process.env.PORT;
