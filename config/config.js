@@ -2,12 +2,15 @@ const fs = require("fs");
 
 module.exports = {
   development: {
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    host: "127.0.0.1",
-    port: 3306,
-    dialect: "mysql",
+    // username: process.env.DB_USERNAME,
+    // password: process.env.DB_PASSWORD,
+    // database: process.env.DB_NAME,
+    username: "postgres",
+    password: "P@$$w0rd!",
+    database: "fuoye360_api_postgres",
+    host: "localhost",
+    port: 5432,
+    dialect: "postgres",
     dialectOptions: {
       bigNumberStrings: true,
     },
@@ -30,17 +33,19 @@ module.exports = {
     host: process.env.PROD_DB_HOSTNAME,
     port: process.env.PROD_DB_PORT,
     dialect: "postgres",
-    dialectOptions: {
-      ssl: {
-        ca: fs.readFileSync(__dirname + "/mysql-ca-master.crt"),
-      },
-    },
+    protocol: "postgres",
     logging: false,
     pool: {
       max: 5,
       min: 0,
       acquire: 30000,
       idle: 10000,
+    },
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
     },
   },
 };
