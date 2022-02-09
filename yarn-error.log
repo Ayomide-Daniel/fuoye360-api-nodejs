@@ -1,0 +1,63 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\HP\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add aws-sdk ejs
+
+PATH: 
+  C:\Tools\Cmder\vendor\conemu-maximus5\ConEmu\Scripts;C:\Tools\Cmder\vendor\conemu-maximus5;C:\Tools\Cmder\vendor\conemu-maximus5\ConEmu;C:\Windows\System32;C:\Users\HP\AppData\Local\Programs\Python\Python35-32\Scripts\;C:\Users\HP\AppData\Local\Programs\Python\Python35-32\;C:\composer;C:\Users\HP\AppData\Local\Programs\Python\Python36-32\Scripts\;C:\Users\HP\AppData\Local\Programs\Python\Python36-32\;C:\ffmpeg\bin;C:\Users\HP\AppData\Roaming\npm;C:\Users\HP\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\HP\AppData\Roaming\Composer\vendor\bin;C:\Program Files\PuTTY\;C:\Program Files\Git\cmd;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\php;C:\Program Files\PostgreSQL\13\bin;C:\Program Files\PostgreSQL\13\lib;C:\Program Files (x86)\Tailscale IPN;C:\xampp\mysql\bin;C:\Program Files\nodejs\;C:\ProgramData\chocolatey\bin;C:\Users\HP\AppData\Local\Programs\Python\Python36-32\Scripts\;C:\Users\HP\AppData\Local\Programs\Python\Python36-32\;C:\Users\HP\AppData\Local\Programs\Python\Python39\Scripts\;C:\Users\HP\AppData\Local\Programs\Python\Python39\;C:\ffmpeg\bin;C:\Users\HP\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\HP\AppData\Roaming\Composer\vendor\bin;C:\Program Files\heroku\bin;C:\Tools;C:\Users\HP\AppData\Local\Microsoft\WindowsApps;C:\Program Files\JetBrains\WebStorm 2020.3.3\bin;C:\php;C:\Program Files\PostgreSQL\13\bin;C:\Program Files\PostgreSQL\13\lib;C:\xampp\mysql\bin;C:\Users\HP\AppData\Roaming\npm;C:\Tools\Cmder\vendor\bin;C:\Tools\Cmder
+
+Yarn version: 
+  1.22.10
+
+Node version: 
+  16.13.1
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: EPERM: operation not permitted, unlink 'c:\Users\HP\Desktop\Node JS\fuoye360-api\node_modules\bcrypt\lib\binding\napi-v3\bcrypt_lib.node'
+
+npm manifest: 
+  {
+    "name": "fuoye360-api",
+    "version": "1.0.0",
+    "description": "FUOYE360 API built with Node.JS",
+    "main": "app.js",
+    "scripts": {
+      "start": "cross-env NODE_ENV=production node app",
+      "dev": "cross-env NODE_ENV=development nodemon app"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/Ayomide-Daniel/fuoye360-api-nodejs.git"
+    },
+    "author": "Ayomide Daniel (Brown)",
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/Ayomide-Daniel/fuoye360-api-nodejs/issues"
+    },
+    "homepage": "https://github.com/Ayomide-Daniel/fuoye360-api-nodejs#readme",
+    "dependencies": {
+      "bcrypt": "^5.0.1",
+      "body-parser": "^1.19.1",
+      "cors": "^2.8.5",
+      "dotenv": "^16.0.0",
+      "express": "^4.17.2",
+      "express-rate-limit": "^6.2.0",
+      "helmet": "^5.0.2",
+      "joi": "^17.6.0",
+      "jsonwebtoken": "^8.5.1",
+      "multer": "^1.4.4",
+      "mysql2": "^2.3.3",
+      "sequelize": "^6.15.0"
+    },
+    "devDependencies": {
+      "cross-env": "^7.0.3",
+      "nodemon": "^2.0.15"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

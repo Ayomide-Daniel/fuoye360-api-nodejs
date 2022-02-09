@@ -13,4 +13,9 @@ module.exports = (app) => {
    * Broadcast Routes
    */
   require("./broadcast")(app);
+
+  /**
+   * Analytic Routes
+   */
+  require("./analytics")(app);
 };

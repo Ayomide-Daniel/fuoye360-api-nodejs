@@ -30,7 +30,7 @@ db.sequelize.sync({ force: false }).then(() => {
 });
 
 // use it before all route definitions
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cors({ origin: ["http://localhost:3000", "https://broadcast.fuoye360.com"] }));
 require("./src/api")(app);
 
 const PORT = process.env.PORT;

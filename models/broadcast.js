@@ -8,7 +8,16 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Broadcast.belongsTo(models.User, { foreignKey: "user_id" });
+      Broadcast.hasMany(models.BroadcastBookmark, {
+        foreignKey: "broadcast_id",
+      });
+      Broadcast.hasMany(models.BroadcastLike, {
+        foreignKey: "broadcast_id",
+      });
+      Broadcast.hasMany(models.BroadcastRetweet, {
+        foreignKey: "broadcast_id",
+      });
     }
   }
   Broadcast.init(
@@ -35,10 +44,5 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "Broadcast",
     }
   );
-
-  Broadcast.associate = (models) => {
-    Broadcast.belongsTo(models.User, { foreignKey: "user_id" });
-    //  Broadcast.hasMany(models.Licencie);
-  };
   return Broadcast;
 };

@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.Broadcast, { foreignKey: "id" });
       User.hasMany(models.BroadcastLike, { foreignKey: "id" });
       User.hasMany(models.BroadcastRetweet, { foreignKey: "id" });
+      User.hasMany(models.BroadcastBookmark, { foreignKey: "id" });
     }
   }
   User.init(

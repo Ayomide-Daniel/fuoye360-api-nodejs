@@ -1,31 +1,29 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class BroadcastRetweet extends Model {
+  class BroadcastBookmark extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      BroadcastRetweet.belongsTo(models.Broadcast, {
-        foreignKey: "broadcast_id",
-      });
+      BroadcastBookmark.belongsTo(models.User, { foreignKey: "user_id" });
     }
   }
-  BroadcastRetweet.init(
+  BroadcastBookmark.init(
     {
       user_id: DataTypes.INTEGER,
-      broadcast_id: DataTypes.INTEGER,
+      post_id: DataTypes.INTEGER,
     },
     {
       sequelize,
       timestamps: true,
       updatedAt: "created_at",
       createdAt: "updated_at",
-      modelName: "BroadcastRetweet",
-      tableName: "broadcast_retweets",
+      modelName: "BroadcastBookmark",
+      tableName: "broadcast_bookmarks",
     }
   );
-  return BroadcastRetweet;
+  return BroadcastBookmark;
 };
