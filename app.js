@@ -50,7 +50,10 @@ app.get("/", (req, res) => {
 
 require("./src/api")(app);
 
-const PORT = process.env.PORT;
-app.listen(PORT, () =>
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
-);
+app.listen(process.env.PORT || 5000, function () {
+  console.log(
+    "Express server listening on port %d in %s mode",
+    this.address().port,
+    app.settings.env
+  );
+});
