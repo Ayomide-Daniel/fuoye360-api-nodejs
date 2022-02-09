@@ -24,10 +24,15 @@ app.use(helmet());
 app.use(limiter);
 
 //Sync Sequelize
-// const db = require("./models");
-// db.sequelize.sync({ force: false }).then(() => {
-// console.log("Database dropped and re-sync successfully.");
-// });
+const db = require("./models");
+db.sequelize
+  .sync({ force: false })
+  .then(() => {
+    // console.log("Database dropped and re-sync successfully.");
+  })
+  .catch((err) => {
+    console.error(err);
+  });
 
 // use it before all route definitions
 app.use(
