@@ -2,18 +2,12 @@ const fs = require("fs");
 
 module.exports = {
   development: {
-    // username: process.env.DB_USERNAME,
-    // password: process.env.DB_PASSWORD,
-    // database: process.env.DB_NAME,
-    username: "postgres",
-    password: "P@$$w0rd!",
-    database: "fuoye360_api_postgres",
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
     host: "localhost",
     port: 5432,
     dialect: "postgres",
-    dialectOptions: {
-      bigNumberStrings: true,
-    },
   },
   test: {
     username: process.env.CI_DB_USERNAME,

@@ -25,14 +25,20 @@ app.use(limiter);
 
 //Sync Sequelize
 const db = require("./models");
-db.sequelize
-  .sync({ force: false })
-  .then(() => {
-    // console.log("Database dropped and re-sync successfully.");
-  })
-  .catch((err) => {
-    console.error(err);
-  });
+try {
+  db.sequelize.authenticate();
+  console.log("Connection has been established successfully.");
+} catch (error) {
+  console.error("Unable to connect to the database:", error);
+}
+// db.sequelize
+//   .sync({ force: false })
+//   .then(() => {
+//     // console.log("Database dropped and re-sync successfully.");
+//   })
+//   .catch((err) => {
+//     console.error(err);
+//   });
 
 // use it before all route definitions
 app.use(

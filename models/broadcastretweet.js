@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       updatedAt: "created_at",
       createdAt: "updated_at",
       modelName: "BroadcastRetweet",
-      tableName: "broadcast_retweets",
+      tableName: "Broadcast_Retweets",
     }
   );
   return BroadcastRetweet;

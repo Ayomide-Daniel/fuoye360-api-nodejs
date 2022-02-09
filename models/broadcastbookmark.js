@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       updatedAt: "created_at",
       createdAt: "updated_at",
       modelName: "BroadcastBookmark",
-      tableName: "broadcast_bookmarks",
+      tableName: "Broadcast_Bookmarks",
     }
   );
   return BroadcastBookmark;
