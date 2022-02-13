@@ -45,6 +45,7 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
+      media: DataTypes.STRING,
       password: DataTypes.STRING,
       email_verified_at: DataTypes.DATE,
     },

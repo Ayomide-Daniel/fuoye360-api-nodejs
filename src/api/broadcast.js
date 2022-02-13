@@ -4,16 +4,26 @@ const { upload } = require("../../config/multer.config");
 const {
   store,
   index,
-  uploadImage,
+  getImage,
 } = require("../Controllers/BroadcastController");
 const { verifyUser } = require("../Middlewares/verifyUser");
 const { validateStore } = require("../Middlewares/broadcast.validation");
+const { validateAndUploadImage } = require("../Middlewares/image.upload");
 
 module.exports = (app) => {
   /**
    * Create broadcast route
    */
-  router.post("/", [verifyUser, validateStore], store);
+  router.post(
+    "/",
+    [
+      verifyUser,
+      upload.array("broadcast-images"),
+      validateAndUploadImage,
+      validateStore,
+    ],
+    store
+  );
 
   /**
    * Get broadcast route
@@ -23,11 +33,16 @@ module.exports = (app) => {
   /**
    * Get broadcast route
    */
-  router.post(
-    "/upload-image",
-    [verifyUser, upload.array("broadcast-images[]")],
-    uploadImage
-  );
+  router.get("/images/:key", [verifyUser], getImage);
+
+  /**
+   * Upload broadcast image route
+   */
+  // router.post(
+  //   "/upload-image",
+  //   [verifyUser, upload.array("broadcast-images[]"), uploadImage],
+  //   uploadImage
+  // );
 
   app.use("/api/v1/broadcast", router);
 };

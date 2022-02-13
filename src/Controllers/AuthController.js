@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const { User } = require("../../models");
 
-exports.registerController = async (req, res) => {
+exports.register = async (req, res) => {
   const { name, username, email, phone_number, password } = req.body;
 
   try {
@@ -27,7 +27,7 @@ exports.registerController = async (req, res) => {
   }
 };
 
-exports.loginController = async (req, res) => {
+exports.login = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await loginUser(email, password);

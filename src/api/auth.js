@@ -1,9 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {
-  registerController,
-  loginController,
-} = require("../Controllers/AuthController");
+const { register, login } = require("../Controllers/AuthController");
 const {
   validateLoginFields,
   validateRegisterFields,
@@ -13,12 +10,12 @@ module.exports = (app) => {
   /**
    * Registration route
    */
-  router.post("/register", validateRegisterFields, registerController);
+  router.post("/register", validateRegisterFields, register);
 
   /**
    * Login route
    */
-  router.post("/login", validateLoginFields, loginController);
+  router.post("/login", validateLoginFields, login);
 
   app.use("/api/v1", router);
 };

@@ -6,7 +6,7 @@ exports.validateStore = async (req, res, next) => {
   const schema = Joi.object({
     post_id: Joi.number(),
     body: Joi.string().required(),
-    media: Joi.object(),
+    media: Joi.array(),
   });
 
   await schema

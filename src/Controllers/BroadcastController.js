@@ -1,5 +1,3 @@
-// const { aws, S3_BUCKET } = require("../../config/aws.config");
-
 const cloudinary = require("cloudinary").v2;
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
@@ -7,15 +5,22 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+const { getFile } = require("../../config/s3.config");
 const { successResponse, errorResponse } = require("../Helpers/response");
 const { Broadcast, User } = require("../../models");
 const { Op } = require("sequelize");
-const sharp = require("sharp");
-const { Readable } = require("stream");
+
+exports.getImage = (req, res) => {
+  const key = req.params.key;
+  const readStream = getFile(key, "broadcast-images");
+  readStream.pipe(res);
+};
 
 exports.store = async (req, res) => {
   const { post_id, body, media } = req.body;
   const user_id = res.locals.user.id;
+
+  console.log(req.body);
   try {
     const broadcast = await createTweet(
       user_id,
@@ -53,25 +58,25 @@ exports.delete = async (req, res) => {
   }
 };
 
-exports.uploadImage = async (req, res) => {
-  req.files.forEach(async (file) => {
-    const { buffer, originalname, mimetype } = file;
-    const timestamp = new Date().toISOString();
-    const ref = `${timestamp}-${originalname}.webp`;
-    const data = await sharp(buffer).webp({ quality: 20 }).toBuffer();
-    const stream = cloudinary.uploader.upload_stream(
-      { folder: "fuoye360/broadcast_images" },
-      (error, result) => {
-        if (error) {
-          errorResponse(res, 500, err, null);
-        }
-        successResponse(res, 200, "Broadcast Image uploaded successfully", {
-          url: result.secure_url,
-        });
-      }
-    );
-    bufferToStream(data).pipe(stream);
-    /*
+// exports.uploadImage = async (req, res) => {
+//   req.files.forEach(async (file) => {
+//     const { buffer, originalname, mimetype } = file;
+//     const timestamp = new Date().toISOString();
+//     const ref = `${timestamp}-${originalname}.webp`;
+//     const data = await sharp(buffer).webp({ quality: 20 }).toBuffer();
+//     const stream = cloudinary.uploader.upload_stream(
+//       { folder: "fuoye360/broadcast_images" },
+//       (error, result) => {
+//         if (error) {
+//           errorResponse(res, 500, error, null);
+//         }
+//         successResponse(res, 200, "Broadcast Image uploaded successfully", {
+//           url: result.secure_url,
+//         });
+//       }
+//     );
+//     bufferToStream(data).pipe(stream);
+/*
     const s3 = new aws.S3();
     // const fileName = req.query["file-name"];
     // const fileType = req.query["file-type"];
@@ -99,8 +104,8 @@ exports.uploadImage = async (req, res) => {
       );
     });
     */
-  });
-};
+//   });
+// };
 const createTweet = (user_id, post_id, body, media) => {
   const data = {
     user_id,

@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const { errorResponse } = require("../Helpers/response");
 const { jwtSecret } = require("../../config/jwt.config");
 const { User } = require("../../models");
+
 exports.verifyUser = async (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
 

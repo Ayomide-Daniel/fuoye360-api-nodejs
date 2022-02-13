@@ -30,6 +30,7 @@ module.exports = {
         allowNull: false,
       },
       email_verified_at: Sequelize.DATE,
+      media: Sequelize.STRING,
       created_at: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW,

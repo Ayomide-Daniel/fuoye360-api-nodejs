@@ -35,7 +35,8 @@
     "pg": "^8.2.1",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.15.0",
-    "sharp": "^0.30.0"
+    "sharp": "^0.30.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
