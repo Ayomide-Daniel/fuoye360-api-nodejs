@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const { errorResponse } = require("../Helpers/response");
+const { errorResponse } = require("../../Helpers/response");
 
 exports.validateStore = async (req, res, next) => {
   const { post_id, body, media } = req.body;

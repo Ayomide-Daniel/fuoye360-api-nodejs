@@ -31,6 +31,8 @@ module.exports = {
       },
       email_verified_at: Sequelize.DATE,
       media: Sequelize.STRING,
+      location: Sequelize.STRING,
+      url: Sequelize.STRING,
       created_at: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW,

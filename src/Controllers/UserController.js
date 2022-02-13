@@ -24,23 +24,25 @@ exports.index = async (req, res) => {
 };
 
 exports.store = async (req, res) => {
-  const user = res.locals.user;
+  const { name, username, bio, location, url, media } = req.body;
   try {
-    successResponse(res, 200, "User retreived successfully", {
+    const user = await User.findOne({ where: { id: res.locals.user.id } });
+    await user.update({
+      name,
+      username,
+      bio,
+      location,
+      url,
+      media: JSON.stringify(media),
+    });
+    await user.save();
+
+    successResponse(res, 200, "User updated successfully", {
       user,
     });
   } catch (error) {
     console.log(error);
     errorResponse(res, 422, error.errors[0].message, null);
-  }
-};
-
-exports.uploadImage = (req, res) => {
-  if (req.files["profile-image"]) {
-    return bufferAndUpload(req.files["profile-image"][0], res);
-  }
-  if (req.files["profile-banner"]) {
-    return bufferAndUpload(req.files["profile-banner"][0], res);
   }
 };
 

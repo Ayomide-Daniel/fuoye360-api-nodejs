@@ -7,8 +7,12 @@ const {
   getImage,
 } = require("../Controllers/BroadcastController");
 const { verifyUser } = require("../Middlewares/verifyUser");
-const { validateStore } = require("../Middlewares/broadcast.validation");
-const { validateAndUploadImage } = require("../Middlewares/image.upload");
+const {
+  validateStore,
+} = require("../Middlewares/broadcast/broadcast.validation");
+const {
+  validateAndUploadImage,
+} = require("../Middlewares/broadcast/image.upload");
 
 module.exports = (app) => {
   /**
