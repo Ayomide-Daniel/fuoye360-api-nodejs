@@ -18,4 +18,9 @@ module.exports = (app) => {
    * Analytic Routes
    */
   require("./analytics")(app);
+
+  /**
+   * Images Route
+   */
+  require("./image")(app);
 };

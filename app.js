@@ -6,16 +6,27 @@ const helmet = require("helmet");
 const bodyParser = require("body-parser");
 const rateLimit = require("express-rate-limit");
 const multer = require("multer");
+const connectDB = require("./config/mongo.config");
+const morgan = require("morgan");
+const { getFile } = require("./config/s3.config");
+
 // const Logger = require('./middleware/Logger')
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
 });
+
 dotenv.config({ path: "./.env" });
+
 const app = express();
 
-// app.use(Logger)
+/**
+ * Logger
+ */
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 
 // app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
@@ -23,31 +34,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
 app.use(limiter);
 
-//Sync Sequelize
-const db = require("./models");
-try {
-  db.sequelize.authenticate().then(() => {
-    console.log("Connection has been established successfully.");
-  });
-} catch (error) {
-  console.error("Unable to connect to the database:", error);
-}
-// db.sequelize
-//   .sync({ force: false })
-//   .then(() => {
-//     // console.log("Database dropped and re-sync successfully.");
-//   })
-//   .catch((err) => {
-//     console.error(err);
-//   });
+/**
+ * Connect DB
+ */
+connectDB();
 
 // use it before all route definitions
 app.use(
-  cors({ origin: ["http://localhost:3000", "https://broadcast.fuoye360.com"] })
+  cors({
+    origin: ["http://localhost:3000", "https://broadcast.fuoye360.com"],
+  })
 );
-app.get("/", (req, res) => {
-  res.status(200).send({ message: "Hello world!" });
-});
 
 require("./src/api")(app);
 

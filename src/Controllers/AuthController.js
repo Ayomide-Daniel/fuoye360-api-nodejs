@@ -3,7 +3,9 @@ const { jwtSecret, jwtExpiresIn } = require("../../config/jwt.config");
 const { successResponse, errorResponse } = require("../Helpers/response");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
-const { User } = require("../../models");
+const User = require("../../mongodb/models/User");
+const { OAuth2Client } = require("google-auth-library");
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 exports.register = async (req, res) => {
   const { name, username, email, phone_number, password } = req.body;
@@ -38,10 +40,43 @@ exports.login = async (req, res) => {
   }
 };
 
-const registerUser = async (name, username, email, phone_number, password) => {
+exports.googleOauth = async (req, res) => {
+  const { credential } = req.body;
+
+  try {
+    const verified_user = await verify(credential);
+    // console.log(verified_user);
+    const new_user = {
+      full_name: verified_user.name,
+      username: generateUsername(verified_user.name),
+      email: verified_user.email,
+      image: verified_user.picture,
+      google_id: verified_user.sub,
+    };
+
+    let user = await User.findOne({ google_id: verified_user.sub });
+    if (!user) {
+      user = await User.create(new_user);
+    }
+    const token = await generateToken(user);
+    console.log({ user, token });
+    successResponse(res, 200, "User login successful", { user, token });
+  } catch (error) {
+    console.log(error);
+    errorResponse(res, 500, "An error occured", null);
+  }
+};
+
+const registerUser = async (
+  full_name,
+  username,
+  email,
+  phone_number,
+  password
+) => {
   const hash = bcrypt.hashSync(password, saltRounds);
   const data = {
-    name,
+    full_name,
     username,
     email,
     phone_number,
@@ -52,7 +87,7 @@ const registerUser = async (name, username, email, phone_number, password) => {
 };
 
 const loginUser = async (email, password) => {
-  const user = await User.findOne({ where: { email } });
+  const user = await User.findOne({ email });
   if (!user) {
     throw "Your credentials are incorrect!";
   }
@@ -71,4 +106,19 @@ const generateToken = async (user) => {
     jwtSecret,
     { expiresIn: jwtExpiresIn }
   );
+};
+
+const generateUsername = (fullname) => {
+  const full_name = fullname.toLowerCase();
+  const username = full_name.replace(/\s/g, "_");
+  return username;
+};
+
+const verify = async (token) => {
+  const ticket = await client.verifyIdToken({
+    idToken: token,
+    audience: process.env.GOOGLE_CLIENT_ID,
+  });
+  const payload = ticket.getPayload();
+  return payload;
 };

@@ -1,10 +1,10 @@
-const jwt = require("jsonwebtoken");
-const { jwtSecret, jwtExpiresIn } = require("../../config/jwt.config");
 const { successResponse, errorResponse } = require("../Helpers/response");
-const { User } = require("../../models");
+const User = require("../../mongodb/models/User");
 const sharp = require("sharp");
 const { Readable } = require("stream");
 const cloudinary = require("cloudinary").v2;
+const { relativeAt } = require("../Helpers/modifiers");
+
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -12,7 +12,8 @@ cloudinary.config({
 });
 
 exports.index = async (req, res) => {
-  const user = res.locals.user;
+  let user = req.user;
+  user.relative_at = relativeAt(user.created_at);
   try {
     successResponse(res, 200, "User retreived successfully", {
       user,
@@ -24,18 +25,23 @@ exports.index = async (req, res) => {
 };
 
 exports.store = async (req, res) => {
-  const { name, username, bio, location, url, media } = req.body;
+  const { full_name, username, bio, location, url, image, banner } = req.body;
   try {
-    const user = await User.findOne({ where: { id: res.locals.user.id } });
-    await user.update({
-      name,
-      username,
-      bio,
-      location,
-      url,
-      media: JSON.stringify(media),
-    });
-    await user.save();
+    const user = await User.findOneAndUpdate(
+      { _id: req.user._id },
+      {
+        full_name,
+        username,
+        bio,
+        location,
+        url,
+        image,
+        banner,
+      },
+      {
+        new: true,
+      }
+    );
 
     successResponse(res, 200, "User updated successfully", {
       user,

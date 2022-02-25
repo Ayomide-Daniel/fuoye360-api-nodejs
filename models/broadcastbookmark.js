@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.INTEGER,
       },
-      post_id: {
+      broadcast_id: {
         allowNull: false,
         type: DataTypes.INTEGER,
       },

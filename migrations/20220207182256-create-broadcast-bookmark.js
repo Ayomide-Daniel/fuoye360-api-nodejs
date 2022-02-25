@@ -12,7 +12,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
       },
-      post_id: {
+      broadcast_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
       },

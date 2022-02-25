@@ -1,5 +1,6 @@
 "use strict";
 const { Model } = require("sequelize");
+const { relativeAt } = require("../src/Helpers/modifiers");
 module.exports = (sequelize, DataTypes) => {
   class Broadcast extends Model {
     /**
@@ -29,12 +30,26 @@ module.exports = (sequelize, DataTypes) => {
           isInt: true,
         },
       },
-      post_id: DataTypes.INTEGER,
+      origin_broadcast_id: DataTypes.INTEGER,
       body: {
         allowNull: false,
         type: DataTypes.TEXT,
       },
       media: DataTypes.TEXT,
+      relative_at: {
+        type: DataTypes.VIRTUAL,
+        get() {
+          return relativeAt(this.created_at);
+        },
+      },
+      meta: {
+        type: DataTypes.VIRTUAL,
+        get() {
+          const meta = {};
+          meta.is_thread = this.origin_broadcast_id == null ? false : true;
+          return meta;
+        },
+      },
     },
     {
       sequelize,

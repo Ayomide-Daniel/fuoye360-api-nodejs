@@ -4,11 +4,15 @@ const { upload } = require("../../config/multer.config");
 const {
   store,
   index,
-  getImage,
+  destroy,
+  showUser,
+  getBookmarks,
 } = require("../Controllers/BroadcastController");
 const { verifyUser } = require("../Middlewares/verifyUser");
 const {
   validateStore,
+  validateDelete,
+  validateUser,
 } = require("../Middlewares/broadcast/broadcast.validation");
 const {
   validateAndUploadImage,
@@ -30,14 +34,24 @@ module.exports = (app) => {
   );
 
   /**
+   * Delete broadcast route
+   */
+  router.delete("/", [verifyUser, validateDelete], destroy);
+
+  /**
    * Get broadcast route
    */
   router.get("/", [verifyUser], index);
 
   /**
+   * Get bookmarked broadcast route
+   */
+  router.get("/bookmarks", [verifyUser], getBookmarks);
+
+  /**
    * Get broadcast route
    */
-  router.get("/images/:key", [verifyUser], getImage);
+  router.get("/user/:user_id", [verifyUser, validateUser], showUser);
 
   /**
    * Upload broadcast image route

@@ -1,5 +1,6 @@
 "use strict";
 const { Model } = require("sequelize");
+const { relativeAt } = require("../src/Helpers/modifiers");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -50,6 +51,12 @@ module.exports = (sequelize, DataTypes) => {
       url: DataTypes.STRING,
       password: DataTypes.STRING,
       email_verified_at: DataTypes.DATE,
+      relative_at: {
+        type: DataTypes.VIRTUAL,
+        get() {
+          return relativeAt(this.created_at);
+        },
+      },
     },
     {
       sequelize,

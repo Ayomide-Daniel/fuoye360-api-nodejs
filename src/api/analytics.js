@@ -7,8 +7,13 @@ const {
   undoRebroadcast,
   addBookmark,
   removeBookmark,
+  followUser,
+  unfollowUser,
 } = require("../Controllers/AnalyticsController");
-const { validateAnalytics } = require("../Middlewares/analytics.validation");
+const {
+  validateAnalytics,
+  validateFollow,
+} = require("../Middlewares/analytics.validation");
 const { verifyUser } = require("../Middlewares/verifyUser");
 
 module.exports = (app) => {
@@ -53,6 +58,16 @@ module.exports = (app) => {
    * Remove from Bookmarks route
    */
   router.delete("/bookmark", [verifyUser, validateAnalytics], removeBookmark);
+
+  /**
+   * Follow user route
+   */
+  router.post("/follow", [verifyUser, validateFollow], followUser);
+
+  /**
+   * Unfollow user route
+   */
+  router.delete("/follow", [verifyUser, validateFollow], unfollowUser);
 
   app.use("/api/v1/analytics", router);
 };

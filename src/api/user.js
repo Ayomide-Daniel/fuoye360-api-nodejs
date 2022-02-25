@@ -29,6 +29,11 @@ module.exports = (app) => {
    */
   router.get("/", [verifyUser], index);
 
+  // /**
+  //  * Get user image
+  //  */
+  // router.get("/:field/:key", [], getImage);
+
   /**
    * Upload Image route
    */

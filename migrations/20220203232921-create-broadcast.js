@@ -12,7 +12,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
       },
-      post_id: Sequelize.INTEGER,
+      origin_broadcast_id: Sequelize.INTEGER,
       body: {
         allowNull: false,
         type: Sequelize.TEXT,

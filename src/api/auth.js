@@ -1,9 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const { register, login } = require("../Controllers/AuthController");
+const {
+  register,
+  login,
+  googleOauth,
+} = require("../Controllers/AuthController");
 const {
   validateLoginFields,
   validateRegisterFields,
+  validateGoogleOauth,
 } = require("../Middlewares/auth.validation");
 
 module.exports = (app) => {
@@ -16,6 +21,11 @@ module.exports = (app) => {
    * Login route
    */
   router.post("/login", validateLoginFields, login);
+
+  /**
+   * Google Oauth route
+   */
+  router.post("/oauth/google", validateGoogleOauth, googleOauth);
 
   app.use("/api/v1", router);
 };

@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-const fs = require("fs");
+// const fs = require("fs");
 const S3 = require("aws-sdk/clients/s3");
 const bucketName = process.env.AWS_S3_BUCKET_NAME;
 const region = process.env.AWS_S3_BUCKET_REGION;
@@ -16,7 +16,7 @@ const { Readable } = require("stream");
 
 // uploads a file
 exports.uploadFile = (data, fieldname, renamedFile) => {
-  const fileStream = Readable.from(data.toString());
+  const fileStream = Readable.from(data);
   const uploadParams = {
     Bucket: `${bucketName}/${fieldname}`,
     Body: fileStream,

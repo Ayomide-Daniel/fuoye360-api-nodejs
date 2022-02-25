@@ -1,63 +1,148 @@
-const cloudinary = require("cloudinary").v2;
+const cloudinary = require("cloudinary").v2,
+  { getFile } = require("../../config/s3.config"),
+  { successResponse, errorResponse } = require("../Helpers/response"),
+  // { Broadcast, User, sequelize } = require("../../models"),
+  Broadcast = require("../../mongodb/models/Broadcast"),
+  User = require("../../mongodb/models/User"),
+  // { Op, QueryTypes } = require("sequelize"),
+  { relativeAt } = require("../Helpers/modifiers");
+
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const { getFile } = require("../../config/s3.config");
-const { successResponse, errorResponse } = require("../Helpers/response");
-const { Broadcast, User } = require("../../models");
-const { Op } = require("sequelize");
-
-exports.getImage = (req, res) => {
-  const key = req.params.key;
-  const readStream = getFile(key, "broadcast-images");
-  readStream.pipe(res);
-};
-
 exports.store = async (req, res) => {
-  const { post_id, body, media } = req.body;
-  const user_id = res.locals.user.id;
-
-  console.log(req.body);
+  const { broadcast_id, body, media } = req.body,
+    { _id } = req.user;
   try {
-    const broadcast = await createTweet(
-      user_id,
-      post_id,
+    /**
+     * Create broadcast
+     */
+    let broadcast = await Broadcast.create({
+      user: _id,
+      broadcast_id,
       body,
-      JSON.stringify(media)
+      media: media,
+    });
+
+    if (broadcast_id) {
+      await Broadcast.findByIdAndUpdate(
+        broadcast_id,
+        {
+          $push: { comments: { $each: [broadcast._id], $position: 0 } },
+        },
+        { new: true }
+      );
+    }
+    /**
+     * Update users broadcast
+     */
+    await User.findOneAndUpdate(
+      { _id },
+      {
+        $push: { broadcasts: broadcast._id },
+      }
     );
+
+    /**
+     * Add some meta data to broadcast
+     */
+    broadcast = await adulterateBroadcast(req, broadcast);
 
     successResponse(res, 200, "Broadcast created successfully", broadcast);
   } catch (error) {
     console.log(error);
-    errorResponse(res, 422, error.errors[0].message, null);
-  }
-};
-
-exports.index = async (req, res) => {
-  try {
-    const broadcasts = await getTweets();
-
-    successResponse(res, 200, "Broadcasts retrieved successfully", broadcasts);
-  } catch (error) {
-    console.error(error);
     errorResponse(res, 422, error, null);
   }
 };
 
-exports.delete = async (req, res) => {
-  const { id } = req.body;
+exports.index = async (req, res) => {
+  const user = req.user;
   try {
-    const broadcast = await deleteTweet(id);
-    successResponse(res, 200, "Broadcast deleted successfully", broadcast);
+    const broadcasts = await Broadcast.find({ broadcast_id: null })
+      .sort({ created_at: -1 })
+      .populate(["user"])
+      .lean();
+    for (let broadcast of broadcasts) {
+      broadcast = adulterateBroadcast(req, broadcast);
+    }
+
+    successResponse(res, 200, "Broadcasts retrieved successfully", broadcasts);
   } catch (error) {
-    console.log(error);
-    errorResponse(res, 422, error.errors[0].message, null);
+    console.error(error);
+    // errorResponse(res, 422, error, null);
   }
 };
 
+exports.destroy = async (req, res) => {
+  const { broadcast_id } = req.body;
+  const { _id } = req.user;
+  try {
+    /**
+     * Create broadcast
+     */
+    let broadcast = await Broadcast.findOneAndDelete({
+      _id: broadcast_id,
+      user: _id,
+    }).exec();
+
+    if (broadcast) {
+      /**
+       * Update users broadcast
+       */
+      await User.findOneAndUpdate(
+        { _id },
+        {
+          $pull: { broadcasts: broadcast_id },
+        }
+      );
+      successResponse(res, 200, "Broadcast deleted successfully", broadcast);
+    }
+    errorResponse(res, 400, "Not ", broadcast);
+  } catch (error) {
+    console.log(error);
+    errorResponse(res, 422, error, null);
+  }
+};
+
+exports.showUser = async (req, res) => {
+  const { user_id } = req.params;
+  try {
+    const broadcasts = await Broadcast.find({ user: user_id })
+      .sort({ created_at: -1 })
+      .populate(["user"])
+      .lean();
+    for (let broadcast of broadcasts) {
+      broadcast = adulterateBroadcast(req, broadcast);
+    }
+    successResponse(res, 200, "Broadcasts retrieved successfully", broadcasts);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.getBookmarks = async (req, res) => {
+  const { _id } = req.user;
+  try {
+    const user = await User.findOne({ _id })
+      .populate({
+        path: "broadcast_bookmarks",
+        populate: {
+          path: "user",
+        },
+      })
+      .lean();
+    const bookmarks = user.broadcast_bookmarks;
+    for (let broadcast of bookmarks) {
+      broadcast = adulterateBroadcast(req, broadcast);
+    }
+    successResponse(res, 200, "Broadcasts retrieved successfully", bookmarks);
+  } catch (error) {
+    console.log(error);
+  }
+};
 // exports.uploadImage = async (req, res) => {
 //   req.files.forEach(async (file) => {
 //     const { buffer, originalname, mimetype } = file;
@@ -68,7 +153,7 @@ exports.delete = async (req, res) => {
 //       { folder: "fuoye360/broadcast_images" },
 //       (error, result) => {
 //         if (error) {
-//           errorResponse(res, 500, error, null);
+// errorResponse(res, 500, error, null);
 //         }
 //         successResponse(res, 200, "Broadcast Image uploaded successfully", {
 //           url: result.secure_url,
@@ -90,7 +175,7 @@ exports.delete = async (req, res) => {
 
     s3.getSignedUrl("putObject", s3Params, (err, data) => {
       if (err) {
-        return errorResponse(res, 422, err, null);
+        // return errorResponse(res, 422, err, null);
       }
       const returnData = {
         signedRequest: data,
@@ -106,25 +191,6 @@ exports.delete = async (req, res) => {
     */
 //   });
 // };
-const createTweet = (user_id, post_id, body, media) => {
-  const data = {
-    user_id,
-    post_id,
-    body,
-    media,
-  };
-
-  return Broadcast.create(data);
-};
-
-const getTweets = async () => {
-  return await Broadcast.findAll({
-    include: {
-      model: User,
-      attributes: { exclude: ["password", "email_verified_at"] },
-    },
-  });
-};
 
 const deleteTweet = (id) => {
   return Broadcast.destroy({ where: { id } });
@@ -138,4 +204,30 @@ const bufferToStream = (buffer) => {
     },
   });
   return readable;
+};
+
+const adulterateBroadcast = (req, broadcast) => {
+  const user = req.user;
+  let meta = {
+    is_thread: false,
+    _info: {
+      count: 4,
+      type: "likes",
+      user: {
+        _id: 4,
+        full_name: "Dave",
+      },
+    },
+    has_bookmarked: user.broadcast_bookmarks.includes(broadcast._id)
+      ? true
+      : false,
+    has_retweeted: user.broadcast_retweets.includes(broadcast._id)
+      ? true
+      : false,
+    has_liked: user.broadcast_likes.includes(broadcast._id) ? true : false,
+    is_followig: user.following.includes(broadcast.user._id) ? true : false,
+  };
+  broadcast.relative_at = relativeAt(broadcast.created_at);
+  broadcast.meta = meta;
+  return broadcast;
 };

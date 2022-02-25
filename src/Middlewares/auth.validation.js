@@ -19,9 +19,9 @@ exports.validateLoginFields = async (req, res, next) => {
 };
 
 exports.validateRegisterFields = async (req, res, next) => {
-  const { name, username, email, phone_number, password } = req.body;
+  const { full_name, username, email, phone_number, password } = req.body;
   const schema = Joi.object({
-    name: Joi.string().required(),
+    full_name: Joi.string().required(),
     username: Joi.string().required(),
     email: Joi.string().email().required(),
     phone_number: Joi.number().required(),
@@ -29,7 +29,30 @@ exports.validateRegisterFields = async (req, res, next) => {
   });
 
   schema
-    .validateAsync({ name, username, email, phone_number, password })
+    .validateAsync({ full_name, username, email, phone_number, password })
+    .then(() => {
+      next();
+    })
+    .catch((err) => {
+      errorResponse(res, 422, err.details[0].message, null);
+    });
+};
+
+exports.validateGoogleOauth = async (req, res, next) => {
+  const { credential } = req.body;
+  const validClientId = [process.env.GOOGLE_CLIENT_ID];
+  const schema = Joi.object({
+    // clientId: Joi.string()
+    //   .required()
+    //   .valid(...validClientId),
+    credential: Joi.string().required(),
+  });
+
+  schema
+    .validateAsync({
+      // clientId,
+      credential,
+    })
     .then(() => {
       next();
     })

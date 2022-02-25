@@ -2,9 +2,9 @@ const Joi = require("joi");
 const { errorResponse } = require("../../Helpers/response");
 
 exports.validateStore = async (req, res, next) => {
-  const { name, username, bio, location, url, media } = req.body;
+  const { full_name, username, bio, location, url, media } = req.body;
   const schema = Joi.object({
-    name: Joi.string().required(),
+    full_name: Joi.string().required(),
     username: Joi.string().required(),
     bio: Joi.string(),
     location: Joi.string(),
@@ -13,7 +13,7 @@ exports.validateStore = async (req, res, next) => {
   });
 
   await schema
-    .validateAsync({ name, username, bio, location, url, media })
+    .validateAsync({ full_name, username, bio, location, url, media })
     .then(() => {
       next();
     })
