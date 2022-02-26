@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app",
-    "build": "npx sequelize-cli db:migrate --env production",
+    "build": "",
     "dev": "cross-env NODE_ENV=development nodemon app"
   },
   "repository": {
