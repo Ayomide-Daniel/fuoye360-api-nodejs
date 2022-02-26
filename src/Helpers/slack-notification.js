@@ -20,3 +20,12 @@ exports.resolveError = async (req, res, err) => {
   });
   return errorResponse(res, 500, "An error occured", null);
 };
+
+exports.slackNotification = async (user, message) => {
+  await webhook.send({
+    text: JSON.stringify({
+      user,
+      message,
+    }),
+  });
+};

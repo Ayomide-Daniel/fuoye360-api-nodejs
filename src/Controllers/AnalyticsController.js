@@ -3,7 +3,7 @@ const { successResponse, errorResponse } = require("../Helpers/response");
 const Broadcast = require("../../mongodb/models/Broadcast");
 const User = require("../../mongodb/models/User");
 const { Op } = require("sequelize");
-const { resolveError } = require("../Helpers/resolve-error");
+const { resolveError } = require("../Helpers/slack-notification");
 
 exports.likeBroadcast = async (req, res) => {
   const { broadcast_id } = req.body;

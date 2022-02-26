@@ -4,7 +4,10 @@ const sharp = require("sharp");
 const { Readable } = require("stream");
 const cloudinary = require("cloudinary").v2;
 const { relativeAt } = require("../Helpers/modifiers");
-const { resolveError } = require("../Helpers/resolve-error");
+const {
+  resolveError,
+  slackNotification,
+} = require("../Helpers/slack-notification");
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,

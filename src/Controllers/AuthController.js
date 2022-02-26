@@ -5,7 +5,10 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const User = require("../../mongodb/models/User");
 const { OAuth2Client } = require("google-auth-library");
-const { resolveError } = require("../Helpers/resolve-error");
+const {
+  resolveError,
+  slackNotification,
+} = require("../Helpers/slack-notification");
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 exports.register = async (req, res) => {
@@ -57,6 +60,7 @@ exports.googleOauth = async (req, res) => {
     let user = await User.findOne({ google_id: verified_user.sub });
     if (!user) {
       user = await User.create(new_user);
+      slackNotification(user, `${user.full_name} just created a new account`);
     }
     const token = await generateToken(user);
     console.log({ user, token });
