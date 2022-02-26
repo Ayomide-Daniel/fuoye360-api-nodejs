@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Ayomide-Daniel/fuoye360-api-nodejs#readme",
   "dependencies": {
+    "@slack/webhook": "^6.1.0",
     "aws-sdk": "^2.1071.0",
     "axios": "^0.26.0",
     "bcrypt": "^5.0.1",

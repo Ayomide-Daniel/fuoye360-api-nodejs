@@ -3,6 +3,7 @@ const { successResponse, errorResponse } = require("../Helpers/response");
 const Broadcast = require("../../mongodb/models/Broadcast");
 const User = require("../../mongodb/models/User");
 const { Op } = require("sequelize");
+const { resolveError } = require("../Helpers/resolve-error");
 
 exports.likeBroadcast = async (req, res) => {
   const { broadcast_id } = req.body;
@@ -259,8 +260,7 @@ exports.followUser = async (req, res) => {
     }
     return errorResponse(res, 400, "An error occured", null);
   } catch (error) {
-    console.log(error);
-    return errorResponse(res, 400, "An error occured", null);
+    return resolveError(req, res, error);
   }
 };
 
@@ -292,7 +292,6 @@ exports.unfollowUser = async (req, res) => {
     }
     return errorResponse(res, 400, "An error occured", null);
   } catch (error) {
-    console.log(error);
-    return errorResponse(res, 400, "An error occured", null);
+    return resolveError(req, res, error);
   }
 };

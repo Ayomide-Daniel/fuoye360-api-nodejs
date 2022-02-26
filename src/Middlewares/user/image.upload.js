@@ -20,8 +20,8 @@ const upload = async (req, file) => {
   const data = await sharp(buffer).webp({ lossless: true }).toBuffer();
   const result = await uploadFile(data, fieldname, renamedFile);
   if (fieldname === "user-banner") {
-    return (req.body.banner = `http://localhost:5000/api/v1/image/${result.key}`);
+    return (req.body.banner = `${process.env.APP_URL}/api/v1/image/${result.key}`);
   } else if (fieldname === "user-image") {
-    return (req.body.image = `http://localhost:5000/api/v1/image/${result.key}`);
+    return (req.body.image = `${process.env.APP_URL}/api/v1/image/${result.key}`);
   }
 };

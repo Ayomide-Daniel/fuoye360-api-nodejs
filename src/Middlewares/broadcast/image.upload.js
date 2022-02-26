@@ -11,7 +11,7 @@ exports.validateAndUploadImage = async (req, res, next) => {
       const renamedFile = `${timestamp}-${uuid.v4()}`;
       const data = await sharp(buffer).webp({ lossless: true }).toBuffer();
       const result = await uploadFile(data, fieldname, renamedFile);
-      req.body.media.push(`http://localhost:5000/api/v1/image/${result.key}`);
+      req.body.media.push(`${process.env.APP_URL}/api/v1/image/${result.key}`);
     }
   }
   next();

@@ -53,8 +53,7 @@ exports.store = async (req, res) => {
 
     successResponse(res, 200, "Broadcast created successfully", broadcast);
   } catch (error) {
-    console.log(error);
-    errorResponse(res, 422, error, null);
+    return resolveError(req, res, error);
   }
 };
 
@@ -71,8 +70,7 @@ exports.index = async (req, res) => {
 
     successResponse(res, 200, "Broadcasts retrieved successfully", broadcasts);
   } catch (error) {
-    console.error(error);
-    // errorResponse(res, 422, error, null);
+    return resolveError(req, res, error);
   }
 };
 
@@ -102,8 +100,7 @@ exports.destroy = async (req, res) => {
     }
     errorResponse(res, 400, "Not ", broadcast);
   } catch (error) {
-    console.log(error);
-    errorResponse(res, 422, error, null);
+    return resolveError(req, res, error);
   }
 };
 
@@ -119,7 +116,7 @@ exports.showUser = async (req, res) => {
     }
     successResponse(res, 200, "Broadcasts retrieved successfully", broadcasts);
   } catch (error) {
-    console.log(error);
+    return resolveError(req, res, error);
   }
 };
 
@@ -140,7 +137,7 @@ exports.getBookmarks = async (req, res) => {
     }
     successResponse(res, 200, "Broadcasts retrieved successfully", bookmarks);
   } catch (error) {
-    console.log(error);
+    return resolveError(req, res, error);
   }
 };
 // exports.uploadImage = async (req, res) => {

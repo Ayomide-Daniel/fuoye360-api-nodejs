@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const User = require("../../mongodb/models/User");
 const { OAuth2Client } = require("google-auth-library");
+const { resolveError } = require("../Helpers/resolve-error");
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 exports.register = async (req, res) => {
@@ -24,8 +25,7 @@ exports.register = async (req, res) => {
       token,
     });
   } catch (error) {
-    console.log(error);
-    errorResponse(res, 422, error.errors[0].message, null);
+    return resolveError(req, res, error);
   }
 };
 
@@ -36,7 +36,7 @@ exports.login = async (req, res) => {
     const token = await generateToken(user);
     successResponse(res, 200, "User login successful", { user, token });
   } catch (error) {
-    errorResponse(res, 422, error, null);
+    return resolveError(req, res, error);
   }
 };
 
@@ -62,8 +62,7 @@ exports.googleOauth = async (req, res) => {
     console.log({ user, token });
     successResponse(res, 200, "User login successful", { user, token });
   } catch (error) {
-    console.log(error);
-    errorResponse(res, 500, "An error occured", null);
+    return resolveError(req, res, error);
   }
 };
 

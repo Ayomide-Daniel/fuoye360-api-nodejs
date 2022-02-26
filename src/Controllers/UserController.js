@@ -4,6 +4,7 @@ const sharp = require("sharp");
 const { Readable } = require("stream");
 const cloudinary = require("cloudinary").v2;
 const { relativeAt } = require("../Helpers/modifiers");
+const { resolveError } = require("../Helpers/resolve-error");
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
@@ -19,8 +20,7 @@ exports.index = async (req, res) => {
       user,
     });
   } catch (error) {
-    console.log(error);
-    errorResponse(res, 422, error.errors[0].message, null);
+    return resolveError(req, res, error);
   }
 };
 
@@ -47,8 +47,7 @@ exports.store = async (req, res) => {
       user,
     });
   } catch (error) {
-    console.log(error);
-    errorResponse(res, 422, error.errors[0].message, null);
+    return resolveError(req, res, error);
   }
 };
 
