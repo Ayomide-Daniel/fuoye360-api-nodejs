@@ -49,9 +49,7 @@ exports.relativeAt = (timestamp) => {
   } else {
     const default_time_ago_month = default_time_ago.getMonth();
     const month_name = month_names[default_time_ago_month];
-    return `${default_time_ago.getDate()} ${month_name.substr(
-      0,
-      3
-    )}, '${default_time_ago.getFullYear().toString().substr(2, 4)}`;
+    return `${default_time_ago.getDate()} ${month_name.substr(0, 3)}`;
+    // '${default_time_ago.getFullYear().toString().substr(2, 4)}`;
   }
 };

@@ -63,7 +63,6 @@ exports.googleOauth = async (req, res) => {
       slackNotification(user, `${user.full_name} just created a new account`);
     }
     const token = await generateToken(user);
-    console.log({ user, token });
     successResponse(res, 200, "User login successful", { user, token });
   } catch (error) {
     return resolveError(req, res, error);

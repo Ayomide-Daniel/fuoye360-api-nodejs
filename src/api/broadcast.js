@@ -7,6 +7,7 @@ const {
   destroy,
   showUser,
   getBookmarks,
+  trending,
 } = require("../Controllers/BroadcastController");
 const { verifyUser } = require("../Middlewares/verifyUser");
 const {
@@ -42,6 +43,11 @@ module.exports = (app) => {
    * Get broadcast route
    */
   router.get("/", [verifyUser], index);
+
+  /**
+   * Get trending broadcast route
+   */
+  router.get("/trending", [verifyUser], trending);
 
   /**
    * Get bookmarked broadcast route

@@ -58,10 +58,13 @@ exports.store = async (req, res) => {
 
 exports.index = async (req, res) => {
   const user = req.user;
+  const { skip, limit } = pagination(req);
   try {
     const broadcasts = await Broadcast.find({ broadcast_id: null })
       .sort({ created_at: -1 })
       .populate(["user"])
+      .skip(skip)
+      .limit(limit)
       .lean();
     for (let broadcast of broadcasts) {
       broadcast = adulterateBroadcast(req, broadcast);
@@ -71,6 +74,27 @@ exports.index = async (req, res) => {
   } catch (error) {
     return resolveError(req, res, error);
   }
+};
+
+exports.trending = async (req, res) => {
+  let { page } = req.query;
+  const { skip, limit } = pagination(req);
+  try {
+    const broadcasts = await Broadcast.find()
+      .or([
+        { $where: "this.likes.length >= 5" },
+        { $where: "this.retweets.length >= 5" },
+      ])
+      .sort({ created_at: -1 })
+      .populate(["user"])
+      .skip(skip)
+      .limit(limit)
+      .lean();
+    for (let broadcast of broadcasts) {
+      broadcast = adulterateBroadcast(req, broadcast);
+    }
+    successResponse(res, 200, "Broadcasts retrieved successfully", broadcasts);
+  } catch (error) {}
 };
 
 exports.destroy = async (req, res) => {
@@ -105,10 +129,13 @@ exports.destroy = async (req, res) => {
 
 exports.showUser = async (req, res) => {
   const { user_id } = req.params;
+  const { skip, limit } = pagination(req);
   try {
     const broadcasts = await Broadcast.find({ user: user_id })
       .sort({ created_at: -1 })
       .populate(["user"])
+      .skip(skip)
+      .limit(limit)
       .lean();
     for (let broadcast of broadcasts) {
       broadcast = adulterateBroadcast(req, broadcast);
@@ -121,6 +148,7 @@ exports.showUser = async (req, res) => {
 
 exports.getBookmarks = async (req, res) => {
   const { _id } = req.user;
+  const { skip, limit } = pagination(req);
   try {
     const user = await User.findOne({ _id })
       .populate({
@@ -129,7 +157,10 @@ exports.getBookmarks = async (req, res) => {
           path: "user",
         },
       })
+      .skip(skip)
+      .limit(limit)
       .lean();
+
     const bookmarks = user.broadcast_bookmarks;
     for (let broadcast of bookmarks) {
       broadcast = adulterateBroadcast(req, broadcast);
@@ -221,9 +252,20 @@ const adulterateBroadcast = (req, broadcast) => {
       ? true
       : false,
     has_liked: user.broadcast_likes.includes(broadcast._id) ? true : false,
-    is_followig: user.following.includes(broadcast.user._id) ? true : false,
   };
   broadcast.relative_at = relativeAt(broadcast.created_at);
   broadcast.meta = meta;
   return broadcast;
+};
+
+const pagination = (req) => {
+  let { page } = req.query;
+  let skip = 0;
+  if (!page) {
+    page = 1;
+  } else {
+    skip = page * 10;
+  }
+  const limit = 10;
+  return { skip, limit };
 };

@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const { relativeAt } = require("../../src/Helpers/modifiers");
-BroadcastSchema = new mongoose.Schema(
+
+const BroadcastSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,

@@ -17,21 +17,29 @@ const { Readable } = require("stream");
 // uploads a file
 exports.uploadFile = (data, fieldname, renamedFile) => {
   const fileStream = Readable.from(data);
-  const uploadParams = {
-    Bucket: `${bucketName}/${fieldname}`,
-    Body: fileStream,
-    Key: renamedFile,
-  };
+  try {
+    const uploadParams = {
+      Bucket: `${bucketName}/${fieldname}`,
+      Body: fileStream,
+      Key: renamedFile,
+    };
 
-  return s3.upload(uploadParams).promise();
+    return s3.upload(uploadParams).promise();
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 // downloads a file
 exports.getFile = (key, fieldname) => {
-  const downloadParms = {
-    Bucket: `${bucketName}/${fieldname}`,
-    Key: key,
-  };
+  try {
+    const downloadParms = {
+      Bucket: `${bucketName}/${fieldname}`,
+      Key: key,
+    };
 
-  return s3.getObject(downloadParms).createReadStream();
+    return s3.getObject(downloadParms).createReadStream();
+  } catch (error) {
+    console.log(error);
+  }
 };

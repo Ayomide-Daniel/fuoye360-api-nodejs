@@ -23,6 +23,7 @@ const UserSchema = new mongoose.Schema(
     bio: String,
     location: String,
     url: String,
+    unread_notifications: { type: Number, default: 0 },
     broadcasts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Broadcast" }],
     broadcast_likes: [
       { type: mongoose.Schema.Types.ObjectId, ref: "Broadcast" },
