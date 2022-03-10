@@ -26,14 +26,27 @@ exports.store = async (req, res) => {
       media: media,
     });
 
+    broadcast = await Broadcast.findById(broadcast._id).lean();
+
+    let origin_broadcast = null;
     if (broadcast_id) {
-      await Broadcast.findByIdAndUpdate(
+      origin_broadcast = await Broadcast.findByIdAndUpdate(
         broadcast_id,
         {
           $push: { comments: { $each: [broadcast._id], $position: 0 } },
         },
         { new: true }
       );
+
+      if (origin_broadcast.user == req.user.id) {
+        await Broadcast.findByIdAndUpdate(
+          broadcast_id,
+          {
+            thread: true,
+          },
+          { new: true }
+        );
+      }
     }
     /**
      * Update users broadcast
@@ -48,9 +61,12 @@ exports.store = async (req, res) => {
     /**
      * Add some meta data to broadcast
      */
-    broadcast = await adulterateBroadcast(req, broadcast);
+    broadcast = adulterateBroadcast(req, broadcast);
 
-    successResponse(res, 200, "Broadcast created successfully", broadcast);
+    successResponse(res, 200, "Broadcast created successfully", {
+      broadcast,
+      origin_broadcast,
+    });
   } catch (error) {
     return resolveError(req, res, error);
   }
@@ -70,7 +86,12 @@ exports.index = async (req, res) => {
       broadcast = adulterateBroadcast(req, broadcast);
     }
 
-    successResponse(res, 200, "Broadcasts retrieved successfully", broadcasts);
+    return successResponse(
+      res,
+      200,
+      "Broadcasts retrieved successfully",
+      broadcasts
+    );
   } catch (error) {
     return resolveError(req, res, error);
   }
@@ -93,8 +114,39 @@ exports.trending = async (req, res) => {
     for (let broadcast of broadcasts) {
       broadcast = adulterateBroadcast(req, broadcast);
     }
-    successResponse(res, 200, "Broadcasts retrieved successfully", broadcasts);
-  } catch (error) {}
+    return successResponse(
+      res,
+      200,
+      "Broadcasts retrieved successfully",
+      broadcasts
+    );
+  } catch (error) {
+    return resolveError(req, res, error);
+  }
+};
+
+exports.findById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    let broadcast = await Broadcast.findById(id)
+      .populate(["user", "comments"])
+      .lean();
+    broadcast = adulterateBroadcast(req, broadcast);
+
+    for (let comment of broadcast.comments) {
+      comment = adulterateBroadcast(req, comment);
+    }
+
+    return successResponse(
+      res,
+      200,
+      "Broadcast retrieved successfully",
+      broadcast
+    );
+  } catch (error) {
+    return resolveError(req, res, error);
+  }
 };
 
 exports.destroy = async (req, res) => {

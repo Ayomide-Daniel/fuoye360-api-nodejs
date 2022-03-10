@@ -8,6 +8,7 @@ const {
   showUser,
   getBookmarks,
   trending,
+  findById,
 } = require("../Controllers/BroadcastController");
 const { verifyUser } = require("../Middlewares/verifyUser");
 const {
@@ -43,6 +44,11 @@ module.exports = (app) => {
    * Get broadcast route
    */
   router.get("/", [verifyUser], index);
+
+  /**
+   * Get broadcast route
+   */
+  router.get("/:id", [verifyUser], findById);
 
   /**
    * Get trending broadcast route

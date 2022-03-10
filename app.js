@@ -9,17 +9,21 @@ const multer = require("multer");
 const connectDB = require("./config/mongo.config");
 const morgan = require("morgan");
 const { getFile } = require("./config/s3.config");
+const http = require("http");
+const { Server } = require("socket.io");
 
 // const Logger = require('./middleware/Logger')
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: 200,
 });
 
 dotenv.config({ path: "./.env" });
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
 
 /**
  * Logger
@@ -52,7 +56,11 @@ require("./src/api")(app);
 const host = "0.0.0.0";
 const port = process.env.PORT || 5000;
 
-app.listen(port, host, function () {
+io.on("connection", (socket) => {
+  console.log("a user connected");
+});
+
+server.listen(port, host, () => {
   console.log("Server started.......");
 });
 

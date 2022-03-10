@@ -1,6 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const { store, index, uploadImage } = require("../Controllers/UserController");
+const {
+  store,
+  index,
+  uploadImage,
+  findByUsername,
+} = require("../Controllers/UserController");
 const { verifyUser } = require("../Middlewares/verifyUser");
 const { upload } = require("../../config/multer.config");
 const { validateAndUploadImage } = require("../Middlewares/user/image.upload");
@@ -28,6 +33,11 @@ module.exports = (app) => {
    * Get user route
    */
   router.get("/", [verifyUser], index);
+
+  /**
+   * Get user route
+   */
+  router.get("/:username", [verifyUser], findByUsername);
 
   // /**
   //  * Get user image

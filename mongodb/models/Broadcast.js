@@ -12,6 +12,10 @@ const BroadcastSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    thread: {
+      type: Boolean,
+      default: false,
+    },
     broadcast_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Broadcast",

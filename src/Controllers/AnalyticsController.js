@@ -111,7 +111,7 @@ exports.rebroadcast = async (req, res) => {
   const user_id = req.user._id;
   try {
     /**
-     * Update the broacast retweets count
+     * Update the broadcast retweets count
      */
     const broadcast = await Broadcast.findOneAndUpdate(
       {
@@ -176,7 +176,7 @@ exports.undoRebroadcast = async (req, res) => {
       { new: true }
     );
     if (!broadcast) {
-      return errorResponse(res, 400, "Rebroacast doesn't exist", null);
+      return errorResponse(res, 400, "Rebroadcast doesn't exist", null);
     }
 
     /**
@@ -378,23 +378,17 @@ exports.unfollowUser = async (req, res) => {
 };
 
 const updateUserUnreadNotifications = async (type, user_id) => {
-  if (type == "inc") {
-    return await User.findByIdAndUpdate(user_id, {
-      $inc: { unread_notifications: 1 },
-    });
-  }
-
   return await User.findByIdAndUpdate(user_id, {
-    $inc: { unread_notifications: -1 },
+    $inc: { unread_notifications: type == "inc" ? 1 : -1 },
   });
 };
 
-const createNotification = async (req, user_id, type, broacast) => {
+const createNotification = async (req, user_id, type, broadcast) => {
   await Notification.create({
     receiver: user_id,
     sender: req.user._id,
     type,
-    broacast: broacast._id,
+    broadcast: broadcast._id,
   });
 
   /**
@@ -408,7 +402,7 @@ const deleteNotification = async (req, user_id, type, broadcast) => {
     receiver: user_id,
     sender: req.user._id,
     type,
-    broacast: broacast._id,
+    broadcast: broadcast._id,
   });
 
   /**
