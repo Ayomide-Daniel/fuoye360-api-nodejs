@@ -1,5 +1,5 @@
 const { successResponse, errorResponse } = require("../Helpers/response");
-const User = require("../../mongodb/models/User");
+const User = require("../../models/User");
 const sharp = require("sharp");
 const { Readable } = require("stream");
 const cloudinary = require("cloudinary").v2;

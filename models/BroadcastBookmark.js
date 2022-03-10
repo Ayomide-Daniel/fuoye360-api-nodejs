@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { relativeAt } = require("../../src/Helpers/modifiers");
+const { relativeAt } = require("../src/Helpers/modifiers");
 BroadcastBookmarkSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,

@@ -3,5 +3,6 @@ node_modules
 *.http
 .vscode
 uploads/
-models/
+# models/
 .sequelizerc
+migrations

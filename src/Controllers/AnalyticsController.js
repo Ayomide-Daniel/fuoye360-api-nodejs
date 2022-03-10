@@ -1,7 +1,7 @@
 const { successResponse, errorResponse } = require("../Helpers/response");
-const Broadcast = require("../../mongodb/models/Broadcast");
-const User = require("../../mongodb/models/User");
-const Notification = require("../../mongodb/models/Notification");
+const Broadcast = require("../../models/Broadcast");
+const User = require("../../models/User");
+const Notification = require("../../models/Notification");
 const { resolveError } = require("../Helpers/slack-notification");
 
 exports.likeBroadcast = async (req, res) => {

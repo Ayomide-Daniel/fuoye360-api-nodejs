@@ -1,8 +1,8 @@
 const cloudinary = require("cloudinary").v2,
   { getFile } = require("../../config/s3.config"),
   { successResponse, errorResponse } = require("../Helpers/response"),
-  Broadcast = require("../../mongodb/models/Broadcast"),
-  User = require("../../mongodb/models/User"),
+  Broadcast = require("../../models/Broadcast"),
+  User = require("../../models/User"),
   { resolveError } = require("../Helpers/slack-notification"),
   { relativeAt } = require("../Helpers/modifiers");
 

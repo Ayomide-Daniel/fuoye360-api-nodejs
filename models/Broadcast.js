@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { relativeAt } = require("../../src/Helpers/modifiers");
+const { relativeAt } = require("../src/Helpers/modifiers");
 
 const BroadcastSchema = new mongoose.Schema(
   {

@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { errorResponse } = require("../Helpers/response");
 const { jwtSecret } = require("../../config/jwt.config");
-const User = require("../../mongodb/models/User");
+const User = require("../../models/User");
 
 exports.verifyUser = async (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];

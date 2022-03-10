@@ -3,7 +3,7 @@ const { jwtSecret, jwtExpiresIn } = require("../../config/jwt.config");
 const { successResponse, errorResponse } = require("../Helpers/response");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
-const User = require("../../mongodb/models/User");
+const User = require("../../models/User");
 const { OAuth2Client } = require("google-auth-library");
 const {
   resolveError,
