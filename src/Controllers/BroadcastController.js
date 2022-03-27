@@ -202,7 +202,7 @@ exports.getBookmarks = async (req, res) => {
   const { _id } = req.user;
   const { skip, limit } = pagination(req);
   try {
-    const user = await User.findOne({ _id })
+    const user = await User.findById(_id)
       .populate({
         path: "broadcast_bookmarks",
         populate: {
@@ -222,68 +222,20 @@ exports.getBookmarks = async (req, res) => {
     return resolveError(req, res, error);
   }
 };
-// exports.uploadImage = async (req, res) => {
-//   req.files.forEach(async (file) => {
-//     const { buffer, originalname, mimetype } = file;
-//     const timestamp = new Date().toISOString();
-//     const ref = `${timestamp}-${originalname}.webp`;
-//     const data = await sharp(buffer).webp({ quality: 20 }).toBuffer();
-//     const stream = cloudinary.uploader.upload_stream(
-//       { folder: "fuoye360/broadcast_images" },
-//       (error, result) => {
-//         if (error) {
-// errorResponse(res, 500, error, null);
-//         }
-//         successResponse(res, 200, "Broadcast Image uploaded successfully", {
-//           url: result.secure_url,
-//         });
-//       }
-//     );
-//     bufferToStream(data).pipe(stream);
-/*
-    const s3 = new aws.S3();
-    // const fileName = req.query["file-name"];
-    // const fileType = req.query["file-type"];
-    const s3Params = {
-      Bucket: S3_BUCKET,
-      Key: ref,
-      Expires: 60,
-      ContentType: mimetype,
-      ACL: "public-read",
-    };
-
-    s3.getSignedUrl("putObject", s3Params, (err, data) => {
-      if (err) {
-        // return errorResponse(res, 422, err, null);
-      }
-      const returnData = {
-        signedRequest: data,
-        url: `https://${S3_BUCKET}.s3.amazonaws.com/${ref}`,
-      };
-      return successResponse(
-        res,
-        200,
-        "Broadcast Image uploaded successfully",
-        returnData
-      );
-    });
-    */
-//   });
-// };
 
 const deleteTweet = (id) => {
   return Broadcast.destroy({ where: { id } });
 };
 
-const bufferToStream = (buffer) => {
-  const readable = new Readable({
-    read() {
-      this.push(buffer);
-      this.push(null);
-    },
-  });
-  return readable;
-};
+// const bufferToStream = (buffer) => {
+//   const readable = new Readable({
+//     read() {
+//       this.push(buffer);
+//       this.push(null);
+//     },
+//   });
+//   return readable;
+// };
 
 const adulterateBroadcast = (req, broadcast) => {
   const user = req.user;
